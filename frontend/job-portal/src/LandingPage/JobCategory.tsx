@@ -17,7 +17,7 @@ const JobCategory = () => {
         slideGap="md"
         loop
         className="focus-visible:[&_button]:!outline-none
-        [&_button]:!bg-bright-sun-400 [&_button]:!border-none [&_button]:hover:opacity-75 &_button]:hover:opacity-0
+        [&_button]:!bg-bright-sun-400 [&_button]:!border-none [&_button]:hover:opacity-75 &_button]:hover:opacity-0 hover:[&_button]:opacity-100
         "
         nextControlIcon={<IconArrowRight className="h-8 w-8" />}
         previousControlIcon={<IconArrowLeft className="h-8 w-8" />}
