@@ -4,6 +4,7 @@ import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
 import HomePage from "./Pages/HomePage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import SingUpPage from "./Pages/SingUpPage";
 
 function App() {
   const theme = createTheme({
@@ -41,6 +42,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="*" element={<HomePage />}></Route>
+          <Route path="/signup" element={<SingUpPage />}></Route>
+          <Route path="/login" element={<HomePage />}></Route>
         </Routes>
       </BrowserRouter>
     </MantineProvider>

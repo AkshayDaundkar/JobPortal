@@ -11,7 +11,7 @@ const Working = () => {
       <div className="text-lg mb-10 mx-auto text-mine-shaft-300 text-center w-1/2">
         Effortlessly navigate through the process and land dream Job.
       </div>
-      <div className="flex px-16 justify-between items-center">
+      <div className="flex px-28 justify-between items-center">
         <div className="relative">
           <img className="w-[30rem]" src="/Working/Girl.png" alt="" />
           <div className="w-36 top-[15%] right-0 absolute flex flex-col items-center gap-1 border border-bright-sun-400 rounded-xl py-3 px-1 backdrop-blur-md">

@@ -1,5 +1,5 @@
 import {
-  IconAnchor,
+  IconAffiliate,
   IconBrandFacebook,
   IconBrandGithub,
   IconBrandInstagram,
@@ -12,8 +12,8 @@ const Footer = () => {
     <div className="mt-20 pb-5 flex gap-5 justify-around">
       <div className="w-1/4 flex flex-col gap-4">
         <div className="flex gap-3 items-center text-bright-sun-400">
-          <IconAnchor className="h-6 w-6" stroke={2.5} />
-          <div className="text-xl font-semibold">JobHook</div>
+          <IconAffiliate className="h-6 w-6" stroke={2.5} />
+          <div className="text-xl font-semibold">Career Connect</div>
         </div>
         <div className="text-sm text-mine-shaft-300">
           Job Portal with user profiles, skills, updates, certifications,work
