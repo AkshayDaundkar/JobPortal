@@ -4,12 +4,11 @@ import {
   IconBrandGithub,
   IconBrandInstagram,
 } from "@tabler/icons-react";
-import React from "react";
 import { footerLinks } from "../Data/Data";
 
 const Footer = () => {
   return (
-    <div className="mt-20 pb-5 flex gap-5 justify-around">
+    <div className="pt-20 pb-5 flex gap-5 justify-around  bg-mine-shaft-950 font-['poppins']">
       <div className="w-1/4 flex flex-col gap-4">
         <div className="flex gap-3 items-center text-bright-sun-400">
           <IconAffiliate className="h-6 w-6" stroke={2.5} />
@@ -38,7 +37,10 @@ const Footer = () => {
             {data.title}
           </div>
           {data.links.map((link, index) => (
-            <div className="text-mine-shaft-300 text-sm hover:text-bright-sun-400 cursor-pointer mb-1 hover:translate-x-2 transition duration-300 ease-in-out">
+            <div
+              key={index}
+              className="text-mine-shaft-300 text-sm hover:text-bright-sun-400 cursor-pointer mb-1 hover:translate-x-2 transition duration-300 ease-in-out"
+            >
               {link}
             </div>
           ))}

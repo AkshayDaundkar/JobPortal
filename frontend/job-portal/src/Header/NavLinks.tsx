@@ -14,6 +14,7 @@ const NavLinks = () => {
     <div className="flex gap-5 text-mine-shaft-300 h-full items-center">
       {links.map((link, index) => (
         <div
+          key={index}
           className={`${
             location.pathname === "/" + link.url
               ? "border-bright-sun-400 text-bright-sun-400"
