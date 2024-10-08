@@ -1,5 +1,5 @@
 import { IconAffiliate } from "@tabler/icons-react";
-import Singup from "../SingupLogin/Singup";
+import SignUp from "./SignUpLogin/SignUp";
 
 const SingUpPage = () => {
   return (
@@ -14,7 +14,7 @@ const SingUpPage = () => {
             </div>
           </div>
         </div>
-        <Singup />
+        <SignUp />
       </div>
     </div>
   );
