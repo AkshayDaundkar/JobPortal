@@ -5,21 +5,21 @@ import "@mantine/carousel/styles.css";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 
-import HomePage from "./Pages/HomePage";
+import HomePage from "./Components/Pages/HomePage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import FindJobs from "./Pages/FindJobs";
-import Header from "./Header/Header";
-import Footer from "./Pages/LandingPage/Footer";
-import FindTalents from "./Pages/FindTalents";
-import PostJobPage from "./Pages/PostJobPage";
-import JobDescPage from "./Pages/JobDescription/JobDescPage";
-import TalentProfilePage from "./Pages/FindTalentsPage/TalentProfilePage/TalentProfilePage";
-import ApplyJobPage from "./Pages/ApplyJobPage";
-import CompanyPage from "./Pages/CompanyPage";
-import PostedJobsPage from "./Pages/PostedJobsPage";
-import JobHistoryPage from "./Pages/JobHistoryPage";
-import SignUpPage from "./Pages/SignUpPage";
-import ProfilePage from "./Pages/ProfilePage";
+import FindJobs from "./Components/Pages/FindJobs";
+import Header from "./Components/Header/Header";
+import Footer from "./Components/Pages/LandingPage/Footer";
+import FindTalents from "./Components/Pages/FindTalents";
+import PostJobPage from "./Components/Pages/PostJobPage";
+import JobDescPage from "./Components/Pages/JobDescription/JobDescPage";
+import TalentProfilePage from "./Components/Pages/FindTalentsPage/TalentProfilePage/TalentProfilePage";
+import ApplyJobPage from "./Components/Pages/ApplyJobPage";
+import CompanyPage from "./Components/Pages/CompanyPage";
+import PostedJobsPage from "./Components/Pages/PostedJobsPage";
+import JobHistoryPage from "./Components/Pages/JobHistoryPage";
+import SignUpPage from "./Components/Pages/SignUpPage";
+import ProfilePage from "./Components/Pages/ProfilePage";
 
 import "@mantine/tiptap/styles.css";
 
@@ -77,6 +77,7 @@ function App() {
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/login" element={<SignUpPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="*" element={<HomePage />} />
           </Routes>
           <Footer />
