@@ -2,17 +2,19 @@ import {
   Anchor,
   Button,
   Checkbox,
+  Divider,
   Group,
   PasswordInput,
   Radio,
-  RadioGroup,
   rem,
   TextInput,
 } from "@mantine/core";
-import { IconAt, IconLock } from "@tabler/icons-react";
+import { IconAt, IconCheck, IconLock, IconX } from "@tabler/icons-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../../../Services/UserService";
+import { signupValidation } from "../../../Services/FormValidation";
+import { notifications } from "@mantine/notifications";
 
 const form = {
   name: "",
@@ -22,47 +24,114 @@ const form = {
   accountType: "APPLICANT",
 };
 
-const SignUp = () => {
-  const [value, setValue] = useState("react");
-  const [data, setData] = useState(form);
+const SignUp = (props: any) => {
+  const [data, setData] = useState<{ [key: string]: string }>(form);
+  const [formError, setFormError] = useState<{ [key: string]: string }>(form);
+  const navigate = useNavigate();
 
   const handleChange = (event: any) => {
-    if (typeof event == "string") setData({ ...data, accountType: event });
-    else setData({ ...data, [event.target.name]: event.target.value });
+    if (typeof event == "string") {
+      setData({ ...data, accountType: event });
+      return;
+    }
+    let name = event.target.name,
+      value = event.target.value;
+    setData({ ...data, [name]: value });
+    setFormError({ ...formError, [name]: signupValidation(name, value) });
+
+    if (name === "password" && data.confirmPassword !== "") {
+      let err = "";
+      if (data.confirmPassword !== value) {
+        err = "password do not match";
+      }
+      setFormError({
+        ...formError,
+        [name]: signupValidation(name, value),
+        confirmPassword: err,
+      });
+    }
+
+    if (name === "confirmPassword") {
+      if (value !== data.password) {
+        setFormError({ ...formError, [name]: "Passwords do not match." });
+      } else {
+        setFormError({ ...formError, confirmPassword: "" });
+      }
+    }
   };
 
   const handleSubmit = () => {
-    registerUser(data)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    let valid = true,
+      newFormError: { [key: string]: string } = {};
+    for (let key in data) {
+      if (key === "accounttype") continue;
+      if (key !== "confirmPassword")
+        newFormError[key] = signupValidation(key, data[key]);
+      else if (data[key] !== data["password"])
+        newFormError[key] = "Passwords do not match.";
+      if (newFormError[key]) valid = false;
+    }
+    setFormError(newFormError);
+    if (valid === true) {
+      registerUser(data)
+        .then((res) => {
+          console.log(res);
+          setData(form);
+          notifications.show({
+            title: "Registered Successfully",
+            message: "Redirecting to login page...",
+            withCloseButton: true,
+            icon: <IconCheck style={{ width: "90%", height: "90%" }} />,
+            color: "teal",
+            withBorder: true,
+            className: "!border-green-500",
+          });
+          setTimeout(() => {
+            navigate("/login");
+          }, 4000);
+        })
+        .catch((err) => {
+          console.log(err);
+          notifications.show({
+            title: "Registration failed",
+            message: err.response.data.errorMessage,
+            withCloseButton: true,
+            icon: <IconX style={{ width: "90%", height: "90%" }} />,
+            color: "red",
+            withBorder: true,
+            className: "!border-red-500",
+          });
+        });
+    }
   };
 
   return (
-    <div className="w-1/2 flex flex-col justify-center px-20 gap-3">
-      <div className="text-2xl font-semibold">Create Account</div>
+    <div className="w-1/2 px-20 flex flex-col justify-center gap-3">
+      <div className="text-2xl font-semibold"> Create Account</div>
       <TextInput
-        name="name"
-        withAsterisk
         value={data.name}
+        error={formError.name}
+        name="name"
         onChange={handleChange}
-        label={"Full Name"}
-        placeholder="Your Name"
+        withAsterisk
+        label="Full Name"
+        placeholder="You Name"
       />
       <TextInput
-        name="email"
-        withAsterisk
         value={data.email}
+        error={formError.email}
+        name="email"
         onChange={handleChange}
+        withAsterisk
         leftSectionPointerEvents="none"
         leftSection={<IconAt style={{ width: rem(16), height: rem(16) }} />}
-        label="Your email"
+        label="Email"
         placeholder="Your email"
       />
       <PasswordInput
-        name="password"
         value={data.password}
+        error={formError.password}
+        name="password"
         onChange={handleChange}
         withAsterisk
         leftSection={
@@ -72,57 +141,63 @@ const SignUp = () => {
         placeholder="Password"
       />
       <PasswordInput
-        name="confirmPassword"
         value={data.confirmPassword}
+        error={formError.confirmPassword}
+        name="confirmPassword"
         onChange={handleChange}
         withAsterisk
         leftSection={
           <IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
         }
         label="Confirm Password"
-        placeholder="Password"
+        placeholder="Confirm Password"
       />
-      <RadioGroup
+      <Radio.Group
         value={data.accountType}
         onChange={handleChange}
-        label="You Are?"
+        label="You are?"
         withAsterisk
       >
         <Group mt="xs">
           <Radio
-            className="py-4 px-6 border hover:bg-mine-shaft-900 has-[:checked]:border-bright-sun-400 border-mine-shaft-800 rounded-lg has-[:checked]:bg-bright-sun-400/5"
+            className="px-6 py-4 border hover:bg-mine-shaft-900 has-[:checked]:border-bright-sun-400 has-[:checked]:bg-bright-sun-400/5 border-mine-shaft-800 rounded-lg"
             autoContrast
             value="APPLICANT"
             label="Applicant"
           />
           <Radio
-            className="py-4 px-6 border  hover:bg-mine-shaft-900 has-[:checked]:border-bright-sun-400 border-mine-shaft-800 rounded-lg  has-[:checked]:bg-bright-sun-400/5 "
+            className="px-6 py-4 border hover:bg-mine-shaft-900 has-[:checked]:border-bright-sun-400 has-[:checked]:bg-bright-sun-400/5 border-mine-shaft-800 rounded-lg"
             autoContrast
             value="EMPLOYER"
             label="Employer"
           />
         </Group>
-      </RadioGroup>
-
+      </Radio.Group>
       <Checkbox
         autoContrast
         label={
           <>
-            I accept <Anchor>terms and conditions</Anchor>
+            I accept <Anchor>terms & condition</Anchor>
           </>
         }
       />
       <Button onClick={handleSubmit} autoContrast variant="filled">
-        SignUp
+        Sign up
       </Button>
       <div className="mx-auto">
         Have an account?{" "}
-        <Link to={"/login"} className="text-bright-sun-400 hover:underline">
+        <span
+          className="text-bright-sun-400 hover:underline cursor-pointer"
+          onClick={() => {
+            navigate("/login");
+            setFormError(form);
+            setData(form);
+          }}
+        >
           Login
-        </Link>
+        </span>
       </div>
     </div>
   );
 };
-
 export default SignUp;
