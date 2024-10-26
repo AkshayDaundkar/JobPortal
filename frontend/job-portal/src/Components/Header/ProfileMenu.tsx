@@ -9,13 +9,22 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { removeUser } from "../../Slices/UserSlice";
 
 const ProfileMenu = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.user);
+
   // controlled switch - for switching dark mode
   const [checked, setChecked] = useState(false);
   //   control open and closing menu
   const [opened, setOpened] = useState(false);
+
+  const handleLogout = () => {
+    dispatch(removeUser());
+  };
 
   return (
     <Menu shadow="md" width={200} opened={opened} onChange={setOpened}>
@@ -23,7 +32,7 @@ const ProfileMenu = () => {
         {/* Profile */}
         <div className="flex items-center gap-2 cursor-pointer">
           <div>
-            <div>Akshay</div>
+            <div>{user.name}</div>
           </div>
           <Avatar src={"avatar2.png"} />
         </div>
@@ -83,6 +92,7 @@ const ProfileMenu = () => {
 
         <Menu.Divider />
         <Menu.Item
+          onClick={handleLogout}
           color="red"
           leftSection={
             <IconLogout2 style={{ width: rem(14), height: rem(14) }} />

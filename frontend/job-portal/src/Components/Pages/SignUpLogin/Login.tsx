@@ -1,4 +1,10 @@
-import { Button, PasswordInput, rem, TextInput } from "@mantine/core";
+import {
+  Button,
+  LoadingOverlay,
+  PasswordInput,
+  rem,
+  TextInput,
+} from "@mantine/core";
 import { IconAt, IconCheck, IconLock, IconX } from "@tabler/icons-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +13,8 @@ import { loginValidation } from "../../../Services/FormValidation";
 import { notifications } from "@mantine/notifications";
 import { useDisclosure } from "@mantine/hooks";
 import ResetPassword from "./ResetPassword";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../Slices/UserSlice";
 
 const form = {
   email: "",
@@ -14,6 +22,9 @@ const form = {
 };
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
   const [data, setData] = useState<{ [key: string]: string }>(form);
   const [formError, setFormError] = useState<{ [key: string]: string }>(form);
   const [opened, { open, close }] = useDisclosure(false);
@@ -25,6 +36,8 @@ const Login = () => {
   };
 
   const handleSubmit = () => {
+    setLoading(true);
+
     let valid = true,
       newFormError: { [key: string]: string } = {};
     for (let key in data) {
@@ -46,10 +59,14 @@ const Login = () => {
             className: "!border-green-500",
           });
           setTimeout(() => {
+            setLoading(false);
+            dispatch(setUser(res));
             navigate("/HomePage");
           }, 4000);
         })
         .catch((err) => {
+          setLoading(false);
+
           console.log(err);
           notifications.show({
             title: "Login failed",
@@ -65,6 +82,13 @@ const Login = () => {
   };
   return (
     <>
+      <LoadingOverlay
+        visible={loading}
+        zIndex={1000}
+        overlayProps={{ radius: "sm", blur: 2 }}
+        loaderProps={{ color: "bright-sun.4", type: "bars" }}
+      />
+
       <div className="w-1/2 px-20 flex flex-col justify-center gap-3">
         <div className="text-2xl font-semibold"> Create Account</div>
 
@@ -95,7 +119,12 @@ const Login = () => {
           placeholder="Password"
         />
 
-        <Button onClick={handleSubmit} autoContrast variant="filled">
+        <Button
+          loading={loading}
+          onClick={handleSubmit}
+          autoContrast
+          variant="filled"
+        >
           Login
         </Button>
         <div className="mx-auto">
